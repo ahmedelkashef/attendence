@@ -1,0 +1,81 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>Attendance List View</title>
+<link rel="shortcut icon" href="/img/location-icon.png">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet"
+	href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+<link rel="stylesheet" href="/css/style.css">
+
+<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.0/angular.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.0/angular-animate.js"></script>
+<script	src="//angular-ui.github.io/bootstrap/ui-bootstrap-tpls-1.2.4.js"></script>
+
+</head>
+
+<div th:include="viewData/navBar :: navBar"></div>
+
+<body ng-app="loacationAttendance" ng-controller="GroupListCtrl" ng-init="init()">
+
+	<div class="container">
+		<div class="row" id="filters">
+				<div class="col-md-4">
+				<div class="form-group">
+                    <label for="name">Search Groups </label>
+                    <input id="name" type="text" ng-model="search.$" class="form-control" />
+                </div>
+			
+			
+				</div>
+				
+				<div class="col-md-2">
+        			<a href="/a/group/create" class="btn btn-default btn-md">New Group</a>
+        		</div>
+		</div>
+		
+		<div class="row">
+				<div class="table-responsive">
+		<table id="groups-table"
+			class="table table-striped table-hover">
+			<thead>
+				<tr>
+					<th>Name</th>
+					<!-- <th>Managers</th>-->
+
+				</tr>
+			</thead>
+			<tbody>
+				<tr ng-repeat = "group in groups | filter:search">
+					<td>{{group.name }}</td>
+					<!-- <td>{{group.managers}}</td>-->
+					
+					<td><a 
+						ng-href="/a/group/edit/{{group.id}}"><b>Edit</b></a></td>
+					<td><a onclick="return confirm('The Group will be Deleted, Are you sure you want to continue?')"
+						ng-href="/a/group/delete/{{group.id}}"><b>Delete</b></a></td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+		</div>
+		</div>
+
+
+</body>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script th:inline="javascript">
+/*<![CDATA[*/
+     /*[+
+
+        var id  = '#' + [[${activeTab}]];
+     	var groups  = [[${groups}]];
+
+        +]*/
+        
+	$(id).addClass("active");
+	/*]]>*/
+</script>
+<script src="/js/app.js"></script>
+<script src="/js/group/groupListCtrl.js"></script>
+</html>

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+	<div th:fragment="navBar" >
+		
+		<nav class="navbar navbar-default " ng-controller="NavBarCtrl" ><!-- navbar-fixed-top -->
+
+		<div class="container">
+			<div>
+				<img style="border-radius: 10px;margin: 2px;" ng-click="openLogoModal()"
+					th:src="${session.sessionLoggedUser.logoUrl}" alt="LOGO"
+					width="150" height="75" ng-mouseover="showCaption = true"
+					ng-mouseleave="showCaption = false"> 
+				<span
+					ng-show="showCaption" class="glyphicon glyphicon-upload"
+					width="150" height="75"></span>
+
+				<div class="pull-right">
+					<img style="border-radius: 10px; margin: 2px;"
+						src="/img/defaulteLogo.png"
+						alt="LOGO" width="150" height="75"> 
+				</div>
+			</div>
+			<!-- Brand and toggle get grouped for better mobile display -->
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle collapsed"
+					data-toggle="collapse" data-target="#navbar_collapse"
+					aria-expanded="false">
+					<span class="sr-only">Toggle navigation</span> <span
+						class="icon-bar"></span> <span class="icon-bar"></span> <span
+						class="icon-bar"></span>
+				</button>
+				<a class="navbar-brand" href="#"> </a>
+			</div>
+
+			<!-- Collect the nav links, forms, and other content for toggling -->
+			<div class="collapse navbar-collapse" id="navbar_collapse">
+				<ul class="nav navbar-nav">
+					<li id="filter_with_map"><a
+						href="/a/viewData/attendanceMapView">Attendance Map View </a></li>
+					<li id="filter_with_list"><a
+						href="/a/viewData/attendanceListView">Attendance List View</a></li>
+					<li id="filter_with_map_history"><a
+						href="/a/viewData/trackingHistoryView">Tracking History </a></li>
+					<li id="live_tracking_map"><a
+						href="/a/viewData/liveTrackingView">Live Tracking </a></li>
+					<li id="group_list"><a href="/a/group/groupList">Groups </a></li>
+					<li id="work_location_list"><a
+						href="/a/workLocation/workLocationList">Work Locations </a></li>
+				</ul>
+				<ul class="nav navbar-nav navbar-right">
+					<li><a href="#"> <span
+							th:if="${session.sessionLoggedUser.pictureUrl == null}"
+							class="glyphicon glyphicon-user"></span> <span
+							th:if="${session.sessionLoggedUser.pictureUrl != null}"> <img
+								alt="userImage" th:src="${session.sessionLoggedUser.pictureUrl}"
+								style="height: 20px; width: 20px; border-radius: 20px;">
+						</span> <b th:text="${session.sessionLoggedUser.email}"></b>
+					</a></li>
+					<li><a href="/a/loging/loginPage?logout=out">Logout<span
+							class="glyphicon glyphicon-log-out"></span>
+					</a></li>
+				</ul>
+			</div>
+
+		</div>
+	</nav>
+	</div>
+	
+</html>

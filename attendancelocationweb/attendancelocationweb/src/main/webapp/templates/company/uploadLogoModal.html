@@ -1,0 +1,19 @@
+<div>
+<div class="modal-header">
+	<h3 class="modal-title">Change company's logo</h3>
+</div>
+
+<form action="{{uploadUrl}}" ng-init="init()"
+	method="post" enctype="multipart/form-data">
+	<div class="modal-body">
+
+		<input type="file" name="companyLogo" accept=".jpg,.jpeg,.png"> 
+
+	</div>
+	<div class="modal-footer">
+		<!--  <button class="btn btn-primary" type="button" ng-click="ok()">OK</button>-->
+		<input class="btn btn-primary" type="submit" value="Submit">
+		<button class="btn btn-warning" type="button" ng-click="cancel()">Cancel</button>
+	</div>
+</form>
+</div>

@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>Insert title here</title>
+</head>
+<body>
+<div th:fragment="filter">
+	<div class="row">
+			 <div class="col-md-5" role="navigation">
+            	<button ng-click="queryWithFilters();" class="btn btn-primary">
+                	<i class="glyphicon glyphicon-search"></i> Search
+            	</button>
+			</div>
+		</div><br/>
+			<div class="row" id="filters">
+				<div class="col-md-4">
+				<div class="form-group">
+                    <label for="name">Email </label>
+                    <input id="name" type="text" name="email" ng-model="search.email" class="form-control" />
+                </div>
+			
+			
+				</div>
+				
+				<div class="col-md-4">
+				<div class="form-group" ng-controller="DatepickerCtrl">
+					<label for="startDate">Date</label>
+					<p class="input-group">
+						<input id="value" type="text" class="form-control"
+							name="date" uib-datepicker-popup="{{format}}"
+							ng-model="search.date" is-open="opened"
+							datepicker-options="dateOptions" close-text="Close"
+							ng-required="true" /> <span class="input-group-btn">
+							<button class="btn btn-default" ng-click="open($event)">
+								<i class="glyphicon glyphicon-calendar"></i>
+							</button>
+						</span>
+					</p>
+				</div>
+			
+				</div>
+			</div>
+        
+        <div class="row">
+        	<img ng-show="loading" alt="" src="/img/load-icon.gif" style="height:25px;width:50;">
+        </div>
+</div>
+
+
+	<div th:fragment="filterFL">
+			
+		<div class="row">
+			<uib-tabset active="active"> 
+			<uib-tab index="0" heading="Groups" ng-click="changeTab(TabGroup)">
+			</uib-tab> 
+			<uib-tab index="1" heading="Employee's Log" ng-click="changeTab(TabEmployee)">
+			</uib-tab>
+		</div>
+		<div class="row" id="filters" style="border: 1px solid #cac8c8;border-radius: 8px;padding-top:10px;margin-bottom:20px;background-color: #f8f8f8;">
+			<div class="col-md-3" ng-show="search.activeTab == TabEmployee">
+				<div class="form-group">
+					<label for="name">Email </label>
+					<input id="name" placeholder="type an email..." type="text"
+						name="email" ng-model="search.email" class="form-control" />
+				</div>
+
+
+			</div>
+
+			<div class="col-md-2" >
+				<div class="form-group" ng-controller="DatepickerCtrl">
+					<label for="startDate" ng-show="search.activeTab == TabEmployee">From</label>
+					<label for="startDate" ng-show="search.activeTab == TabGroup">Date</label>
+					<p class="input-group">
+						<input id="startDate" type="text" class="form-control" name="startDate"
+							uib-datepicker-popup="{{format}}" ng-model="search.startDate"
+							is-open="opened" datepicker-options="dateOptions"
+							close-text="Close" ng-required="true" /> <span
+							class="input-group-btn">
+							<button class="btn btn-default" ng-click="open($event)">
+								<i class="glyphicon glyphicon-calendar"></i>
+							</button>
+						</span>
+					</p>
+				</div>
+
+			</div>
+			
+			<div class="col-md-2" ng-show="search.activeTab == TabEmployee">
+				<div class="form-group" ng-controller="DatepickerCtrl">
+					<label for="endDate">To</label>
+					<p class="input-group">
+						<input id="endDate" type="text" class="form-control" name="endDate"
+							uib-datepicker-popup="{{format}}" ng-model="search.endDate"
+							is-open="opened" datepicker-options="dateOptions"
+							close-text="Close" ng-required="true" /> <span
+							class="input-group-btn">
+							<button class="btn btn-default" ng-click="open($event)">
+								<i class="glyphicon glyphicon-calendar"></i>
+							</button>
+						</span>
+					</p>
+				</div>
+
+			</div>
+
+			<div class="col-md-2" ng-show="search.activeTab == TabGroup">
+				<label for="selectedGroup">Group
+				 <a ng-show="search.selectedGroup"
+					ng-href="/a/group/edit/{{search.selectedGroup.id}}"><b>(View)</b></a></label>
+				<select id="selectedGroup" class="form-control" ng-model="search.selectedGroup"
+					ng-options="opt.name for opt in page.groups"></select>
+				
+			</div>
+
+			<div class="col-md-1">
+				<button ng-click="apply();" class="btn btn-defaulte">
+					<i class="glyphicon glyphicon-search" ng-disabled="loading"></i> Apply
+				</button>
+			</div>
+		</div>
+	</div>
+
+</body>
+</html>

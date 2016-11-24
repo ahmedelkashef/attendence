@@ -1,0 +1,39 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Manager Details</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/style.css">
+
+</head>
+<div th:include="navBar :: navBar"></div>
+
+<body>
+<div class="container">
+    <div class="row">
+        <h3 th:text="${managerEmail}"></h3>
+        <br>
+        <div class="table-responsive">
+            <table class="table table-striped table-hover">
+                <thead>
+                <tr>
+                    <th>Groups</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="group : ${groups}">
+                    <td th:text="${group.name}"></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <br>
+        <br>
+        <form th:href="a/managers/delete/${managerId}" method="post">
+            <input type="submit" value="Delete">
+        </form>
+    </div>
+</div>
+</body>
+</html>

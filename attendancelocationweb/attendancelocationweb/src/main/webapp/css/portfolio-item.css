@@ -1,0 +1,55 @@
+/*!
+ * Start Bootstrap - Portfolio Item HTML Template (http://startbootstrap.com)
+ * Code licensed under the Apache License v2.0.
+ * For details, see http://www.apache.org/licenses/LICENSE-2.0.
+ */
+
+/*body {
+    padding-top: 70px;  Required padding for .navbar-fixed-top. Remove if using .navbar-static-top. Change if height of navigation changes. 
+}*/
+
+.portfolio-item {
+    margin-bottom: 25px;
+}
+
+footer {
+    margin: 50px 0;
+}
+.breadcrumb { background: #38B0FF}
+.breadcrumb a { color:#fff !important; font-size: 12px }
+.breadcrumb> .active { color:#E6E6E6 !important; font-size: 13px }
+.mb15 { margin-bottom:15px }
+.mb5  { margin-bottom: 5px }
+
+.get-btn { clear:both; margin:15px 0}
+
+
+.glyphicon-refresh-animate {
+    -animation: spin .7s infinite linear;
+    -webkit-animation: spin2 .7s infinite linear;
+}
+
+@-webkit-keyframes spin2 {
+    from { -webkit-transform: rotate(0deg);}
+    to { -webkit-transform: rotate(360deg);}
+}
+
+@keyframes spin {
+    from { transform: scale(1) rotate(0deg);}
+    to { transform: scale(1) rotate(360deg);}
+}
+
+
+.process-txt {margin-left: 9px;
+ margin-top: 4px;}
+ 
+ .icon-process {margin-top: 5px}
+ 
+ 
+ .number-process{margin-left: 6px;margin-top: 0;font-size: 21px;margin-bottom: 0;background: #FFFFFF;padding: 3px 6px;border-radius: 3px;color: #E99548;}
+ 
+ .btn-process {width: 250px;
+    cursor: auto; background:#ec971f !important}
+	
+	
+	.default-width { width:210px }

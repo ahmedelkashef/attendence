@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+  http://www.springframework.org/schema/beans/spring-beans-4.3.xsd
+  http://www.springframework.org/schema/context
+  http://www.springframework.org/schema/context/spring-context-4.3.xsd
+  http://www.springframework.org/schema/aop         
+  http://www.springframework.org/schema/aop/spring-aop-4.3.xsd
+  http://www.springframework.org/schema/mvc 
+  http://www.springframework.org/schema/mvc/spring-mvc-4.3.xsd">
+
+	<!-- Component scanning will significantly slow down application initialization time -->
+	<!-- <context:component-scan base-package="com.cloudypedia.spring" /> -->
+	
+	<!-- <context:annotation-config/>-->
+   <!-- bean definitions go here -->
+
+	<mvc:annotation-driven>
+		<mvc:path-matching suffix-pattern="false" /><!-- to map .* -->
+	</mvc:annotation-driven>
+
+	<!-- **************************************************************** -->
+	<!-- RESOURCE FOLDERS CONFIGURATION -->
+	<!-- Dispatcher configuration for serving static resources -->
+	<!-- **************************************************************** -->
+	<mvc:resources location="/images/" mapping="/images/**" />
+	<mvc:resources location="/css/" mapping="/css/**" />
+
+	<!-- **************************************************************** -->
+	<!-- THYMELEAF-SPECIFIC ARTIFACTS -->
+	<!-- TemplateResolver <- TemplateEngine <- ViewResolver -->
+	<!-- **************************************************************** -->
+	<bean id="servletContext"
+    	class="com.cloudypedia.spring.cofig.ServletContextFactory"></bean>
+    	
+	<bean id="templateResolver"
+		class="org.thymeleaf.templateresolver.ServletContextTemplateResolver">
+		<property name="order" value="0"/>
+		<property name="prefix" value="/templates/" />
+		<property name="suffix" value=".html" />
+		<property name="templateMode" value="HTML5" />
+		<property name="cacheable" value="true" />
+		
+		<constructor-arg index="0" ref="servletContext"/>
+	</bean>
+	
+	<bean id="jspViewResolver"
+		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="order" value="1"/>
+		<property name="viewClass" value="org.springframework.web.servlet.view.JstlView" />
+		<property name="prefix" value="/" />
+		<property name="viewNames" value="jsp/*" /><!-- any view name start with jsp/ will handled here -->
+		<property name="suffix" value=".jsp" />
+	</bean>
+
+	<bean id="templateEngine" class="org.thymeleaf.spring4.SpringTemplateEngine">
+		<property name="templateResolver" ref="templateResolver" />
+	</bean>
+
+	<bean id="thymeleafViewResolver" class="org.thymeleaf.spring4.view.ThymeleafViewResolver">
+		<property name="templateEngine" ref="templateEngine" />
+	</bean>
+	
+	
+	<bean class = "org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter">
+    <property name="messageConverters">
+        <array>
+            <bean class = "org.springframework.http.converter.StringHttpMessageConverter">
+                <property name="writeAcceptCharset" value = "false" />
+            </bean>
+        </array>
+    </property>
+	</bean>  
+	
+	
+	<!-- /***************************Controllers**********************************/ -->
+	
+	<bean id="ownerController" class="com.cloudypedia.spring.controllers.CompanyController">
+  	</bean>
+	
+	<bean id="homeController" class="com.cloudypedia.spring.controllers.HomeController">
+  	</bean>
+  	
+  	<bean id="viewDataController" class="com.cloudypedia.spring.controllers.ViewDataController">
+  	</bean>
+  	
+  	<bean id="mobileApiController" class="com.cloudypedia.spring.controllers.MobileApiController">
+  	</bean>
+  	
+  	<bean id="logingContoller" class="com.cloudypedia.spring.controllers.LogingContoller">
+  	</bean>
+  	
+  	<bean id="groupController" class="com.cloudypedia.spring.controllers.GroupController">
+  	</bean>
+  	
+  	<bean id="workLocationController" class="com.cloudypedia.spring.controllers.WorkLocationController">
+  	</bean>
+  	
+  	<!-- <bean id="exceptionControllerAdvice" class="com.cloudypedia.spring.advisor.ExceptionControllerAdvice">
+  	</bean>-->
+</beans>
+

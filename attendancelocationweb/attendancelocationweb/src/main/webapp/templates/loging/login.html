@@ -1,0 +1,172 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<meta name="google-signin-client_id"
+	th:content="${clientId}">
+<link rel="stylesheet" href="/css/normalize.css">
+<style>
+.loader {
+	position: absolute;
+	margin: auto;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	background: url('/img/load-icon.gif') 50% 50% no-repeat
+		rgb(249, 249, 249);
+}
+
+.logo-row {
+	margin: 0 auto;
+	width: 100%;
+	float: left;
+	text-align: center;
+}
+
+.logo-image {
+	background: #fff;
+	padding: 34px;
+	border-radius: 9px;
+	box-shadow: 0 2px 4px 0 rgba(0, 0, 0, .25);
+	-webkit-box-sizing: border-box;
+}
+
+.btn-row {
+	margin: 19px auto 0;
+	width: 100%;
+	float: left;
+	clear: both;
+}
+
+.btn-login {
+	margin: 0 auto;
+	width: 120px;
+}
+</style>
+<script src="https://apis.google.com/js/platform.js" async defer></script>
+
+<script type="text/javascript">
+
+var firstTime = true;
+
+var getUrlParameter = function getUrlParameter(sParam) {
+    var sPageURL = decodeURIComponent(window.location.search.substring(1)),
+        sURLVariables = sPageURL.split('&'),
+        sParameterName,
+        i;
+
+    for (i = 0; i < sURLVariables.length; i++) {
+        sParameterName = sURLVariables[i].split('=');
+
+        if (sParameterName[0] === sParam) {
+            return sParameterName[1] === undefined ? true : sParameterName[1];
+        }
+    }
+};
+var onSignIn = function onSignIn(googleUser) {
+		
+		if(getUrlParameter("logout") && firstTime){
+			signOut();
+			firstTime = false;
+			return;
+		}
+		
+		//$("#loginButton").hide();
+		var id_token = googleUser.getAuthResponse().id_token;
+		//console.log('token: ' + id_token);
+		var xhr = new XMLHttpRequest();
+		xhr.open('POST', '//' + window.location.host + '/a/loging/login', true);
+		xhr.setRequestHeader('Content-Type',
+				'application/x-www-form-urlencoded');
+		xhr.onload = function() {
+
+			$("#loadJif").fadeOut("slow");
+
+			//console.log('Signed in as: ' + xhr.responseText);
+
+			var response = JSON.parse(xhr.responseText);
+			if (xhr.status == 500) {
+				alert("Internal server error");
+				return;
+			}
+			if (response.error) {
+				alert(response.error.message);
+				//signOut();
+			} else {
+				window.location = '//' + window.location.host
+						+ response.result.path;
+				console.log('window.location: ' + window.location);
+
+			}
+
+		};
+		xhr.send('idToken=' + id_token);
+		$("#loadJif").show();
+
+		
+	}
+
+	var signOut = function signOut() {
+		var auth2 = gapi.auth2.getAuthInstance();
+		auth2.signOut().then(function() {
+			console.log('User signed out.');
+			
+			$.ajax({
+				type : "post",
+				url : "/a/loging/logout",
+				success : function(data) {
+					console.log("SUCCESS: ", data);
+					$("#loginButton").show();
+					
+					if (data.error) {
+						alert(data.error.message);
+					} else {
+
+					}
+					
+				},
+				error : function(e) {
+					console.log("ERROR: ", e);
+					$("#loadJif").fadeOut("slow");
+				},
+				done : function(e) {
+					console.log("DONE");
+				}
+			});
+		});
+	}
+</script>
+<title>Login</title>
+<link rel="shortcut icon" href="/img/location-icon.png">
+</head>
+<body>
+	<div id="loadJif" class="loader"></div>
+	<p id="redirect"></p>
+	<a href="#" onclick="signOut();" style="display: none">Sign out</a><!--  -->
+	<!--  -->
+	<section class="loginform cf">
+	<form name="login" action="index_submit" method="get"
+		accept-charset="utf-8">
+		<div class="login-block">
+			<span class="logo-row"> <!--<img style="width:400px" class="logo-image" alt="SIS"
+				src="/img/mokatamLogo.png" />--> <!-- <img class="logo-image" alt="" src="/img/schoologo.jpg"/>-->
+				<img img style="width: 140px" class="logo-image" alt=""
+				src="/img/location-icon.png" />
+
+			</span> <span class="btn-row"> <!-- <label for="button">Sign in with google</label>-->
+				<div id="loginButton" name="button" class="g-signin2 btn-login"
+					data-onsuccess="onSignIn"></div>
+			</span>
+		</div>
+	</form>
+	</section>
+</body>
+<script
+	src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+<script type="text/javascript">
+	$(window).load(function() {
+		// Animate loader off screen
+		$("#loadJif").fadeOut("slow");
+	});
+</script>
+</html>

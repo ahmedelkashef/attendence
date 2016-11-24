@@ -1,0 +1,335 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>Attendance List View</title>
+<link rel="shortcut icon" href="/img/location-icon.png">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet"
+	href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+<link rel="stylesheet" href="/css/style.css">
+
+<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.0/angular.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.0/angular-animate.js"></script>
+<script	src="//angular-ui.github.io/bootstrap/ui-bootstrap-tpls-1.2.4.js"></script>
+
+</head>
+
+<div th:include="viewData/navBar :: navBar"></div>
+
+<body ng-app="loacationAttendance" ng-controller="GroupEditCtrl"
+	ng-init="init()">
+
+	<div class="container">
+		<div class="row">
+			<div class="col-xs-6">
+				<div class="form-group">
+           			<input id="name" placeholder="Group name..." type="text" name="name" ng-model="groupPage.groupSettings.name" class="form-control" />
+        		</div>
+        	</div>
+        	<div class="col-xs-3">
+        		<button ng-disabled="loading" type="button" class="btn btn-default btn-sm" ng-click="save()">Save</button>
+        	</div>
+        </div>
+        
+        <div class="row">
+        	 <div th:include="viewData/loadingRow :: loadingRow"></div>
+        </div>
+       
+		
+		<uib-tabset active="active"> 
+			<uib-tab index="0" heading="Members">
+		
+		<h3>Members</h3>
+		<div class="row" ><!-- style="overflow: auto; height: 400px;" -->
+			<div class="col-md-5">
+				<div class="form-group">
+					<input placeholder="search members..." type="text"
+						ng-model="memFilter.$" class="form-control" />
+				</div>
+				<table id="members-table" class="table table-striped table-hover">
+					<thead>
+						<tr>
+							<th>Members</th>
+
+						</tr>
+					</thead>
+					<tbody>
+						<tr ng-repeat="member in groupPage.members | filter:memFilter"
+							ng-hide="member.memRemove">
+							<td><b>{{member.firstName}} {{member.lastName}}</b><br /> <span>{{member.email}}</span>
+							</td>
+							<td><button ng-click="removeFromGroup(member)" type="button"
+									class="btn btn-default btn-xs">remove</button></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<div class="col-md-5">
+				<div class="form-group">
+					<input placeholder="search employees..." type="text"
+						ng-model="empFilter.$" class="form-control" />
+				</div>
+				<table id="employees-table" class="table table-stable-hover">
+					<thead>
+						<tr>
+							<th>Employees</th>
+
+						</tr>
+					</thead>
+					<tbody>
+						<tr ng-repeat="employee in groupPage.employees | filter:empFilter"
+							ng-hide="employee.groups.length > 0 || employee.memSelected || employee.mangagerOrigin">
+							<td><b>{{employee.firstName}} {{employee.lastName}}</b><br />
+								<span>{{employee.email}}</span></td>
+							<td><button ng-click="addToGroup(employee)" type="button"
+									class="btn btn-default btn-xs">add</button></td>
+
+						</tr>
+					</tbody>
+				</table>
+			</div>
+
+			<div class="col-md-2"></div>
+
+			
+
+		</div>
+
+		</uib-tab> 
+			
+			<uib-tab index="1" heading="Managers">
+				<h3>Managers</h3>
+		<div class="row" ><!-- style="overflow: auto; height: 400px;" -->
+			<div class="col-md-5">
+				<div class="form-group">
+					<input placeholder="search managers..." type="text"
+						ng-model="managFilter.$" class="form-control" />
+				</div>
+				<table id="members-table" class="table table-striped table-hover">
+					<thead>
+						<tr>
+							<th>Managers</th>
+
+						</tr>
+					</thead>
+					<tbody>
+						<tr ng-repeat="manager in groupPage.managers | filter:managFilter"
+							ng-hide="manager.managRemove">
+							<td><b>{{manager.firstName}} {{manager.lastName}}</b><br /> 
+								<span>{{manager.email}}</span>
+							</td>
+							<td><button ng-click="removeFromManagers(manager)" type="button"
+									class="btn btn-default btn-xs">remove</button></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<div class="col-md-5">
+				<div class="form-group">
+					<input placeholder="search employees..." type="text"
+						ng-model="empFilterm.$" class="form-control" />
+				</div>
+				<table id="employees-table" class="table table-striped table-hover">
+					<thead>
+						<tr>
+							<th>Employees</th>
+
+						</tr>
+					</thead>
+					<tbody>
+						<tr ng-repeat="employee in groupPage.employees | filter:empFilterm"
+							ng-hide="employee.managSelected || employee.memberOrigin">
+							<td><b>{{employee.firstName}} {{employee.lastName}}</b><br />
+								<span>{{employee.email}}</span></td>
+							<td><button ng-click="addToManagers(employee)" type="button"
+									class="btn btn-default btn-xs">add</button></td>
+
+						</tr>
+					</tbody>
+				</table>
+			</div>
+
+			<div class="col-md-2"></div>
+
+			
+
+		</div>
+			 
+			</uib-tab> 
+			
+			<uib-tab index="2" heading="Group Settings">
+				<div class="row">
+					<div class="col-md-3">
+						<h3>Attendance</h3>
+						<div class="checkbox">
+							<label> 
+								<input type="checkbox" ng-model="groupPage.groupSettings.attendanceEnabled">
+								<span style="text-decoration: underline;">Attendance</span>
+							</label>
+						</div>
+						
+						<div ng-show="groupPage.groupSettings.attendanceEnabled">
+							<div class="checkbox">
+							<label> 
+								<input type="checkbox" ng-model="groupPage.groupSettings.attendanceInWorkLocationOnly">
+								Attendance in work location only 
+							</label>
+							</div>
+							<div class="checkbox">
+							<label> 
+								<input type="checkbox" ng-model="groupPage.groupSettings.autoLocationAttendance">
+								Auto Location Attendance
+							</label>
+							</div>
+							<div class="checkbox">
+							<label> 
+								<input type="checkbox" ng-model="groupPage.groupSettings.needImage">
+								Take photo
+							</label>
+							</div>
+							<!-- <div class="checkbox">
+							<label> 
+								<input type="checkbox" ng-model="groupPage.groupSettings.notificationsEnabled">
+								Notifications
+							</label>
+							</div>-->
+							
+							<h3>Geo-fence</h3>
+							<div class="checkbox">
+							<label> 
+								<input type="checkbox" ng-model="groupPage.groupSettings.useWifi">
+								Use wifi networks
+							</label>
+							</div>
+							<div class="checkbox">
+							<label> 
+								<input type="checkbox" ng-model="groupPage.groupSettings.useUserLocation">
+								Use user's location
+							</label>
+							</div>
+						</div>
+					</div>
+					
+					
+					<div class="col-md-3">
+						<h3>Tracking</h3>
+						<div class="checkbox">
+							<label> 
+								<input type="checkbox" ng-model="groupPage.groupSettings.trackingEnabled">
+								<span style="text-decoration: underline;">Tracking</span>
+							</label>
+						</div>
+						
+						<div ng-show="groupPage.groupSettings.trackingEnabled">
+							
+							<div class="checkbox">
+							<label> 
+								<input type="checkbox" ng-model="groupPage.groupSettings.trackingAllTime"
+								ng-change="groupPage.groupSettings.trackingDuringShiftOnly=false">
+								Tracking all time
+							</label>
+							</div>
+							<div class="checkbox">
+							<label> 
+								<input type="checkbox" ng-model="groupPage.groupSettings.trackingDuringShiftOnly"
+								ng-change="groupPage.groupSettings.trackingAllTime=false">
+								Tracking during shift only
+							</label>
+							</div>
+							<div class="form-group">
+							<label> 
+								Tracking interval in minutes:
+      							<select class="form-control" ng-model="groupPage.groupSettings.trackingInterval" ng-options="opt for opt in intervals"></select>
+    						</label>
+							</div>
+						</div>
+					</div>
+					
+					<div class="col-md-3">
+						<h3>Work Location</h3>
+						<select class="form-control" ng-model="groupPage.workLocation" 
+						ng-options="opt.name for opt in groupPage.workLocations"></select>
+						<a ng-hide="groupPage.workLocation.id == 0" ng-href="/a/workLocation/edit/{{groupPage.workLocation.id}}"><b>View Location</b></a>
+					</div>
+					
+					<div class="col-md-3">
+						<h3>Work Shift</h3>
+						<div class="container">
+						<div class="row">
+						<!-- <span ng-hide="validShift()" style="color:red"> Start hour should be less than End Hour </span> -->
+						
+				<div>
+					<label for="startTime">Start Time</label>
+					<div id="startTime">
+					<select 
+						ng-model="workShift.startHour" name="startHour"
+						ng-options="hour for hour in hours" >
+					</select><b style="font-size:20px">:</b>
+					<select 
+						ng-model="workShift.startMinute" 
+						ng-options="minute for minute in minutes">
+					</select>
+					</div> 
+				</div>
+				<div>
+					<label for="endTime">End Time</label> 
+					<div id="endTime">
+					<select 
+						ng-model="workShift.endHour" name="endHour"
+						ng-options="hour for hour in hours" >
+					</select><b style="font-size:20px">:</b>
+					<select 
+						ng-model="workShift.endMinute" name="endHour"
+						ng-options="minute for minute in minutes">
+					</select>
+					</div>
+				</div>
+				<div>
+					<label for="timeZone">TimZone</label>
+					<div id="timeZone">
+					 <select id="timeZone"
+						ng-model="workShift.timeZone" name="timeZone"
+						ng-options="timeZone for timeZone in timeZones">
+					</select>
+					</div>
+				</div>
+				</div>
+				
+				
+				<div class="row">
+				<label for="workDays">WorkDays:</label>
+				<div id="workDays" class="checkbox" ng-repeat = "workDay in workDays">
+					<label> 
+						<input type="checkbox" ng-model="workDay.included">
+						<span>{{workDay.name}}</span>
+					</label>
+				</div>
+				</div>
+				</div>
+			</div>
+					
+				</div>
+			</uib-tab>
+		</uib-tabset>
+
+		
+	</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script th:inline="javascript">
+/*<![CDATA[*/
+     /*[+
+
+        var id  = '#' + [[${activeTab}]];
+     	var groupPage  = [[${groupPage}]];
+
+        +]*/
+        
+	$(id).addClass("active");
+	/*]]>*/
+</script>
+<script src="/js/app.js"></script>
+<script src="/js/group/groupEditCtrl.js"></script>
+</body>
+
+</html>

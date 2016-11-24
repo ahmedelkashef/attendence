@@ -1,0 +1,70 @@
+
+<datastore-indexes  autoGenerate="true">
+
+	<!-- AttendanceLog -->
+    <datastore-index kind="AttendanceLog" ancestor="true" source="manual">
+        <property name="date" direction="desc"/>
+    </datastore-index>
+    
+    <datastore-index kind="AttendanceLog" ancestor="true" source="manual">
+        <property name="date" direction="asc"/>
+    </datastore-index>
+    
+    <datastore-index kind="AttendanceLog" ancestor="true" source="manual">
+        <property name="status" direction="asc"/>
+        <property name="date" direction="asc"/>
+    </datastore-index>
+    
+    <datastore-index kind="AttendanceLog" ancestor="true" source="manual">
+        <property name="userId" direction="asc"/>
+        <property name="date" direction="asc"/>
+    </datastore-index>
+    
+    <datastore-index kind="AttendanceLog" ancestor="true" source="manual">
+        <property name="dateDay" direction="asc"/>
+        <property name="status" direction="asc"/>
+        <property name="userId" direction="asc"/>
+        <property name="date" direction="asc"/>
+    </datastore-index>
+    
+    <datastore-index kind="AttendanceLog" ancestor="true" source="manual">
+        <property name="dateDay" direction="asc"/>
+        <property name="status" direction="asc"/>
+        <property name="userId" direction="asc"/>
+        <property name="date" direction="desc"/>
+    </datastore-index>
+    
+    <!-- <datastore-index kind="AttendanceLog" ancestor="false" source="manual">
+        <property name="userId" direction="asc"/>
+        <property name="date" direction="asc"/>
+    </datastore-index>-->
+    
+    <!-- TrackingLog -->
+    <datastore-index kind="TrackingLog" ancestor="true" source="manual">
+        <property name="date" direction="desc"/>
+    </datastore-index>
+    
+    <datastore-index kind="TrackingLog" ancestor="true" source="manual">
+        <property name="date" direction="asc"/>
+    </datastore-index>
+    
+    <datastore-index kind="TrackingLog" ancestor="true" source="manual">
+        <property name="status" direction="asc"/>
+        <property name="date" direction="asc"/>
+    </datastore-index>
+    
+    <datastore-index kind="TrackingLog" ancestor="true" source="manual">
+        <property name="userId" direction="asc"/>
+        <property name="date" direction="asc"/>
+    </datastore-index>
+    
+    <datastore-index kind="TrackingLog" ancestor="true" source="manual">
+        <property name="userId" direction="asc"/>
+        <property name="date" direction="desc"/>
+    </datastore-index>
+    <!-- <datastore-index kind="TrackingLog" ancestor="false" source="manual">
+        <property name="userId" direction="asc"/>
+        <property name="date" direction="asc"/>
+    </datastore-index>-->
+
+</datastore-indexes>
